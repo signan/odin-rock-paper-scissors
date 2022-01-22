@@ -1,5 +1,9 @@
 function computerPlay() {
-    let choicesAvailable = ['Rock', 'Paper', 'Scissors'];
-    let randomChoice = choicesAvailable[Math.floor(Math.random() * 3)];
-    return randomChoice
+    let choicesAvailable = ['rock', 'paper', 'scissors'];
+    let randomChoice = choicesAvailable[Math.floor(Math.random() * choicesAvailable.length)];
+    return randomChoice;
 }
+
+
+
+
