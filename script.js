@@ -1,4 +1,13 @@
-function computerPlay() {
+const resultDiv = document.getElementById('result');
+const h3 = document.createElement('h3');
+resultDiv.appendChild(h3);
+let playerScore = 0;
+let computerScore = 0;
+let roundWinner = '';
+let scoreMessage = '';
+
+
+function computerSelect() {
     let choicesAvailable = ['rock', 'paper', 'scissors'];
     let randomChoice = choicesAvailable[Math.floor(Math.random() * choicesAvailable.length)];
     return randomChoice;
@@ -7,66 +16,58 @@ function computerPlay() {
 function playRound(computerSelection, playerSelection) {
     //a tie
     if (computerSelection === playerSelection) {
-        return 0;
+        return 'Tie';
     }
     //pc wins
     else if ((computerSelection === "paper" && playerSelection === "rock") ||
             (computerSelection === "scissors" && playerSelection === "paper") ||
             (computerSelection === "rock" && playerSelection === "scissors")) {
-        return 1;
+        computerScore++;
+        return 'Computer';
     }
     //player wins
     else if ((computerSelection === "scissors" && playerSelection === "rock") ||
             (computerSelection === "rock" && playerSelection === "paper") ||
             (computerSelection === "paper" && playerSelection === "scissors")) {
-        return 2;
+        playerScore++;
+        return 'Player';
         }
-    //note a valid choice
-    else {
-        return -1;
-    }
 }
 
 function declareWinner(computerScore, playerScore) {
     if (computerScore > playerScore) {
-        return "Computer wins with score of " + computerScore + " against " + playerScore;
+        h3.textContent = `${h3.textContent} Computer wins!!!!!`;
     }
     else {
-        return "Player wins with score of " + playerScore + " against " + computerScore;
+        h3.textContent = `${h3.textContent} Player wins!!!!!`;
     }
 }
 
-function game() {
-    let computerScore = 0;
-    let playerScore = 0;
-    for (let i=1; i <= 5; i++) {
-        let computerSelection = computerPlay();
-        let playerSelection = window.prompt("enter a choice").toLowerCase();
-        let roundResult = playRound(computerSelection, playerSelection)
-        console.log("roundResult " + roundResult);
-        switch (roundResult) {
-            case 0:
-                console.log("It's a tie. both are " + playerSelection);
-                i--;
-                break;
-            case 1:
-                console.log("PC Wins!!! with " + computerSelection + " against " + playerSelection);
-                computerScore++;
-                break;
-            case 2:
-                console.log("Player Wins!!! with " + playerSelection + " against " + computerSelection);
-                playerScore++;
-                break;
-            case -1:
-                console.log(playerSelection + " is not a valid choice. play again.");
-                i--;
-                break;
-        }
-
-        console.log("round " + i + "\npc: " + computerScore + "\nplayer: " + playerScore);
-    }
-    console.log(declareWinner(computerScore, playerScore));
+function restartGame() {
+    playerScore = 0;
+    computerScore = 0;
+    h3.textContent = `${h3.textContent}\nrestarting`;
 }
 
+function updateScoreMessage() {
+    h3.textContent = `${playerScore}-${computerScore}`;
+}
 
-game();
+function isGameOver() {
+    return playerScore === 5 || computerScore === 5;
+}
+
+function beginGame(playerSelection) {
+    console.log('begin game');
+    let computerSelection = computerSelect();
+    playerSelection = playerSelection.toLowerCase();
+    roundWinner = playRound(computerSelection, playerSelection);
+    updateScoreMessage();
+    if (isGameOver()) {
+        declareWinner();
+        restartGame();
+    }
+}
+
+btns = document.querySelectorAll('button');
+btns.forEach(btn => btn.addEventListener('click', () => beginGame(btn.textContent)));
